@@ -13,11 +13,20 @@ h2{background:#ff6600;color:#fff;padding:10px;border-radius:10px}
 input{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
 .menu-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #eee}
 .controls{display:flex;align-items:center;gap:10px}
-.btn{width:32px;height:32px;border:none;border-radius:50%;background:#25D366;color:#fff;font-size:18px}
+.btn{width:32px;height:32px;border:none;border-radius:50%;background:#25D366;color:#fff;font-size:18px;cursor:pointer}
 .qty{min-width:20px;text-align:center;font-weight:bold}
 .total{text-align:center;font-size:22px;font-weight:bold;margin-top:20px}
-.order-btn{width:100%;padding:14px;background:#25D366;color:white;border:none;border-radius:10px;font-size:18px;margin-top:20px}
+.order-btn{width:100%;padding:14px;background:#25D366;color:white;border:none;border-radius:10px;font-size:18px;margin-top:20px;cursor:pointer}
 .floatwa{position:fixed;bottom:20px;right:20px;background:#25D366;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;color:white;font-size:30px}
+#searchBox{
+width:100%;
+padding:12px;
+margin:15px 0;
+border:2px solid #ff6600;
+border-radius:10px;
+font-size:16px;
+box-sizing:border-box;
+}
 </style>
 </head>
 <body>
@@ -26,6 +35,7 @@ input{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;box-sizing
 <p style="text-align:center">Pure Veg Restaurant<br>📞 9555484389</p>
 
 <input type="text" id="tableNo" placeholder="Enter Table Number">
+<input type="text" id="searchBox" placeholder="🔍 Search Food Item..." onkeyup="searchFood()">
 
 <h2>Pizza</h2>
 <div class="menu-item"><span>🔥 Garlic Pizza - ₹220</span><div class="controls"><button class="btn" onclick="removeItem('Garlic Pizza')">-</button><span id="Garlic Pizza" class="qty">0</span><button class="btn" onclick="addItem('Garlic Pizza')">+</button></div></div>
@@ -51,22 +61,72 @@ input{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;box-sizing
 <button class="order-btn" onclick="sendOrder()">Order on WhatsApp</button>
 </div>
 
-<a class="floatwa" href="https://wa.me/919555484389">💬</a>
+<a class="floatwa" href="#" onclick="sendOrder(); return false;">💬</a>
 
 <script>
 let cart={};
 const prices={"Garlic Pizza":220,"Cheese Pizza":260,"Veg Burger":55,"Cheese Burger":80,"Veg Kopta":200,"Malai Kopta":260,"Dal Fried":120,"Dal Jira":100,"Plain Rice":90,"Jira Rice":120};
 
-function addItem(item){cart[item]=(cart[item]||0)+1;document.getElementById(item).innerText=cart[item];updateTotal();}
-function removeItem(item){if(cart[item]>0){cart[item]--;document.getElementById(item).innerText=cart[item];updateTotal();}}
-function updateTotal(){let total=0;for(let i in cart){total+=cart[i]*prices[i];}document.getElementById('totalBill').innerText='₹'+total;}
+function addItem(item){
+    cart[item]=(cart[item]||0)+1;
+    document.getElementById(item).innerText=cart[item];
+    updateTotal();
+}
+
+function removeItem(item){
+    if(cart[item]>0){
+        cart[item]--;
+        document.getElementById(item).innerText=cart[item];
+        updateTotal();
+    }
+}
+
+function updateTotal(){
+    let total=0;
+    for(let i in cart){
+        total+=cart[i]*prices[i];
+    }
+    document.getElementById('totalBill').innerText='₹'+total;
+}
+
+function searchFood(){
+    let input = document.getElementById("searchBox").value.toLowerCase();
+    let items = document.getElementsByClassName("menu-item");
+    for(let i=0;i<items.length;i++){
+        let text = items[i].innerText.toLowerCase();
+        if(text.includes(input)){
+            items[i].style.display="flex";
+        } else {
+            items[i].style.display="none";
+        }
+    }
+}
+
 function sendOrder(){
-let tableNo=document.getElementById('tableNo').value;
-let total=0;
-let msg='New Order%0ATable Number: '+tableNo+'%0A%0A';
-for(let i in cart){if(cart[i]>0){msg+=i+' x '+cart[i]+'%0A';total+=cart[i]*prices[i];}}
-msg+='%0ATotal Bill: ₹'+total;
-window.open('https://wa.me/919555484389?text='+msg,'_blank');
+    let tableNo=document.getElementById('tableNo').value;
+    if(!tableNo){
+        alert("Please enter Table Number first!");
+        return;
+    }
+    let total=0;
+    let hasItems=false;
+    let msg='New Order%0ATable Number: '+tableNo+'%0A%0A';
+    
+    for(let i in cart){
+        if(cart[i]>0){
+            msg+=i+' x '+cart[i]+'%0A';
+            total+=cart[i]*prices[i];
+            hasItems=true;
+        }
+    }
+    
+    if(!hasItems){
+        alert("Please add at least one item to your cart!");
+        return;
+    }
+    
+    msg+='%0ATotal Bill: ₹'+total;
+    window.open('https://wa.me/919555484389?text='+msg,'_blank');
 }
 </script>
 </body>
