@@ -1,133 +1,143 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shyam Bog Menu</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-<style>
-body{font-family:'Poppins',sans-serif;background:linear-gradient(135deg,#ffecd2,#fcb69f);margin:0;padding:20px}
-.container{max-width:700px;margin:auto;background:#fff;padding:20px;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.15)}
-h1{text-align:center;color:#ff6600}
-h2{background:#ff6600;color:#fff;padding:10px;border-radius:10px}
-input{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;box-sizing:border-box}
-.menu-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #eee}
-.controls{display:flex;align-items:center;gap:10px}
-.btn{width:32px;height:32px;border:none;border-radius:50%;background:#25D366;color:#fff;font-size:18px;cursor:pointer}
-.qty{min-width:20px;text-align:center;font-weight:bold}
-.total{text-align:center;font-size:22px;font-weight:bold;margin-top:20px}
-.order-btn{width:100%;padding:14px;background:#25D366;color:white;border:none;border-radius:10px;font-size:18px;margin-top:20px;cursor:pointer}
-.floatwa{position:fixed;bottom:20px;right:20px;background:#25D366;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;text-decoration:none;color:white;font-size:30px}
-#searchBox{
-width:100%;
-padding:12px;
-margin:15px 0;
-border:2px solid #ff6600;
-border-radius:10px;
-font-size:16px;
-box-sizing:border-box;
-}
-</style>
-</head>
-<body>
-<div class="container">
-<h1>🍽️ Shyam Bog</h1>
-<p style="text-align:center">Pure Veg Restaurant<br>📞 9555484389</p>
 
-<input type="text" id="tableNo" placeholder="Enter Table Number">
-<input type="text" id="searchBox" placeholder="🔍 Search Food Item..." onkeyup="searchFood()">
+                { : "पनीर मंचूरियन (ग्रेवी)", : 200 },
+                { name: "वेज मंचूरियन (ड्राई)", price: 150 },
+                { name: "वेज मंचूरियन (ग्रेवी)", price: 160 },
+                { name: "पनीर 65", price: 210 },
+                { name: "वेज लॉलीपॉप", price: 200 },
+                { name: "पनीर लॉलीपॉप", price: 260 }
+            ],
+            "तन्दूरी रोटी व नान": [
+                { name: "प्लेन रोटी", price: 12 },
+                { name: "बटर रोटी", price: 15 },
+                { name: "मक्का रोटी", price: 30 },
+                { name: "मिस्सी रोटी", price: 50 },
+                { name: "स्टफ मिस्सी", price: 70 },
+                { name: "लच्छन पराpriceठा", price: 50 },
+                { name: "प्लेन नान", price: 40 },
+                { name: "बटर नान", price: 50 },
+                { name: "गार्लिक नान", price: 80 },
+                { name: "स्टफ नान", price: 100 },
+                { name: "कीज़ार नान", price: 80 },
+                { name: "पनीर नान", price: 120 },
+                { name: "चूर चूर नान", price: 130 },
+                { name: "शाही नान", price: 170 }
+            ],
+            "रायता व सलाद": [
+                { name: "बून्दी रायता", price: 100 },
+                { name: "वेज रायता", price: 110 },
+                { name: "फ्रूट रायता", price: 140 },
+                { name: "अनियन सलाद", price: 40 },
+                { name: "ग्रीन सलाद", price: 60 },
+                { name: "टोमैटो सलाद", price: 40 }
+            ],
+            "आइसक्रीम": [
+                { name: "वैनिला आइसक्रीम", price: 60 },
+                { name: "स्ट्रॉबेरी आइसक्रीम", price: 60 },
+                { name: "बटर स्कॉच आइसक्रीम", price: 70 },
+                { name: "चॉकलेट आइसक्रीम", price: 90 }
+            ],
+            "वेज थाली": [
+                { name: "वेज थाली (नॉर्मल)", price: 150 },
+                { name: "वेज थाली (बटर रोटी)", price: 200 },
+                { name: "स्पेशल वेज थाली (नान)", price: 260 }
+            ],
+            "कोफ्ता, दाल व राइस": [
+                { name: "वेज कोफ्ता", price: 200 },
+                { name: "अंगूरी कोफ्ता", price: 280 },
+                { name: "मलाई कोफ्ता", price: 260 },
+                { name: "नरगिसी कोफ्ता", price: 350 },
+                { name: "दाल फ्राई", price: 120 },
+                { name: "दाल जीरा", price: 100 },
+                { name: "दाल तडका", price: 140 },
+                { name: "बटर दाल फ्राई", price: 130 },
+                { name: "दाल मुगलई", price: 180 },
+                { name: "दाल मखानी", price: 240 },
+                { name: "प्लेन राइस", price: 90 },
+                { name: "जीरा राइस", price: 120 },
+                { name: "मसाला राइस", price: 150 },
+                { name: "वेज पुलाव", price: 180 },
+                { name: "मटर पुलाव", price: 170 },
+                { name: "पनीर पुलाव", price: 220 },
+                { name: "काश्मीरी पुलाव", price: 260 },
+                { name: "वेज बिरियानी", price: 180 },
+                { name: "पनीर बिरियानी", price: 200 },
+                { name: "पनीर दम बिरियानी", price: 260 }
+            ],
+            "सूप, बेवरेज व शेक": [
+                { name: "वेज हॉट एण्ड सावर सूप", price: 99 },
+                { name: "वेज मन्चाओ सूप", price: 99 },
+                { name: "स्वीटकॉर्न सूप", price: 100 },
+                { name: "टोमैटो सूप", price: 80 },
+                { name: "मशरूम सूप", price: 100 },
+                { name: "मिनरल वाटर", price: 20 },
+                { name: "चाय", price: 25 },
+                { name: "हॉट काफी", price: 35 },
+                { name: "चॉकलेट काफी", price: 50 },
+                { name: "लस्सी", price: 50 },
+                { name: "कोल्ड काफी", price: 90 },
+                { name: "स्ट्रॉबेरी शेक", price: 90 },
+                { name: "वैनिला शेक", price: 90 },
+                { name: "चॉकलेट शेक", price: 110 },
+                { name: "मैंगो शेक", price: 110 }
+            ],
+            "रोल, नूडल्स व तन्दूरी स्टार्टर": [
+                { name: "वेज काठी रोल", price: 80 },
+                { name: "वेज पनीर काठी रोल", price: 120 },
+                { name: "वेज मशरूम काठी रोल", price: 130 },
+                { name: "वेज सिजवान काठी रोल", price: 110 },
+                { name: "वेज चाउमीन", price: 100 },
+                { name: "वेज पनीर चाउमीन", price: 130 },
+                { name: "वेज सिजवान नूडल्स", price: 110 },
+                { name: "वेज हक्का नूडल्स", price: 120 },
+                { name: "चिली गार्लिक नूडल्स", price: 140 },
+                { name: "मन्चूरियन नूडल्स", price: 120 },
+                { name: "वेज अमेरिकन चौपसी", price: 160 },
+                { name: "मिक्स अमेरिकन चौपसी", price: 200 },
+                { name: "पनीर टिक्का ड्राई", price: 280 },
+                { name: "पनीर मलाई टिक्का", price: 300 },
+                { name: "पनीर अचारी टिक्का", price: 280 },
+                { name: "मशरुम टिक्का", price: 270 },
+                { name: "मलाई चाप", price: 170 },
+                { name: "तन्दूरी चाप", price: 160 }
+            ],
+            "स्वीट, ब्रेकफास्ट व सैंडविच": [
+                { name: "रसमलाई", price: 40 },
+                { name: "रबड़ी", price: 50 },
+                { name: "श्याम भोग स्पे० स्वीट", price: 60 },
+                { name: "राज भोग", price: 30 },
+                { name: "गाजर हलवा (100g)", price: 50 },
+                { name: "स्पंज रसगुल्ला", price: 20 },
+                { name: "लाल मोहन", price: 20 },
+                { name: "आलू पराठा, दही", price: 70 },
+                { name: "गोभी पराठा, दही", price: 80 },
+                { : "मिक्स पराठा, दही", price: 90 },
+                { name: "पनीर पराठा, दही", price: 100 },
+                { name: "प्याज पराठा, दही", price: 70 },
+                { name: "छोला पूरी", price: 70 },
+                { name: "छोला भटूरा", price: 90 },
+                { name: "पाव भाजी", price: 80 },
+                { name: "स्पे० पाव भाजी", price: 120 },
+                { name: "नॉर्मल सैंडविच", price: 50 },
+                { name: "वेज सैंडविच", price: 70 },
+                { name: "वेज चीज सैंडविच", price: 90 },
+                { name: "वेज पनीर सैंडविच", price: 80 },
+                { name: "वेज क्लब सैंडविच", price: 110 },
+                { name: "तन्दूरी सैंडविच", price: 100 }
+            ]
+        };
 
-<h2>Pizza</h2>
-<div class="menu-item"><span>🔥 Garlic Pizza - ₹220</span><div class="controls"><button class="btn" onclick="removeItem('Garlic Pizza')">-</button><span id="Garlic Pizza" class="qty">0</span><button class="btn" onclick="addItem('Garlic Pizza')">+</button></div></div>
-<div class="menu-item"><span>Cheese Pizza - ₹260</span><div class="controls"><button class="btn" onclick="removeItem('Cheese Pizza')">-</button><span id="Cheese Pizza" class="qty">0</span><button class="btn" onclick="addItem('Cheese Pizza')">+</button></div></div>
+        let cart = {};
 
-<h2>Burgers</h2>
-<div class="menu-item"><span>Veg Burger - ₹55</span><div class="controls"><button class="btn" onclick="removeItem('Veg Burger')">-</button><span id="Veg Burger" class="qty">0</span><button class="btn" onclick="addItem('Veg Burger')">+</button></div></div>
-<div class="menu-item"><span>Cheese Burger - ₹80</span><div class="controls"><button class="btn" onclick="removeItem('Cheese Burger')">-</button><span id="Cheese Burger" class="qty">0</span><button class="btn" onclick="addItem('Cheese Burger')">+</button></div></div>
+        // Generate and Render Menu View
+        function renderMenu() {
+            const container = document.getElementById("menuContainer");
+            container.innerHTML = "";
 
-<h2>Kopta</h2>
-<div class="menu-item"><span>Veg Kopta - ₹200</span><div class="controls"><button class="btn" onclick="removeItem('Veg Kopta')">-</button><span id="Veg Kopta" class="qty">0</span><button class="btn" onclick="addItem('Veg Kopta')">+</button></div></div>
-<div class="menu-item"><span>Malai Kopta - ₹260</span><div class="controls"><button class="btn" onclick="removeItem('Malai Kopta')">-</button><span id="Malai Kopta" class="qty">0</span><button class="btn" onclick="addItem('Malai Kopta')">+</button></div></div>
+            for (let category in menuData) {
+                let categoryHtml = `
+                    <div class="category-
+                    `;
+                });
 
-<h2>Dal</h2>
-<div class="menu-item"><span>Dal Fried - ₹120</span><div class="controls"><button class="btn" onclick="removeItem('Dal Fried')">-</button><span id="Dal Fried" class="qty">0</span><button class="btn" onclick="addItem('Dal Fried')">+</button></div></div>
-<div class="menu-item"><span>Dal Jira - ₹100</span><div class="controls"><button class="btn" onclick="removeItem('Dal Jira')">-</button><span id="Dal Jira" class="qty">0</span><button class="btn" onclick="addItem('Dal Jira')">+</button></div></div>
-
-<h2>Rice</h2>
-<div class="menu-item"><span>Plain Rice - ₹90</span><div class="controls"><button class="btn" onclick="removeItem('Plain Rice')">-</button><span id="Plain Rice" class="qty">0</span><button class="btn" onclick="addItem('Plain Rice')">+</button></div></div>
-<div class="menu-item"><span>Jira Rice - ₹120</span><div class="controls"><button class="btn" onclick="removeItem('Jira Rice')">-</button><span id="Jira Rice" class="qty">0</span><button class="btn" onclick="addItem('Jira Rice')">+</button></div></div>
-
-<div class="total">Total: <span id="totalBill">₹0</span></div>
-<button class="order-btn" onclick="sendOrder()">Order on WhatsApp</button>
-</div>
-
-<a class="floatwa" href="#" onclick="sendOrder(); return false;">💬</a>
-
-<script>
-let cart={};
-const prices={"Garlic Pizza":220,"Cheese Pizza":260,"Veg Burger":55,"Cheese Burger":80,"Veg Kopta":200,"Malai Kopta":260,"Dal Fried":120,"Dal Jira":100,"Plain Rice":90,"Jira Rice":120};
-
-function addItem(item){
-    cart[item]=(cart[item]||0)+1;
-    document.getElementById(item).innerText=cart[item];
-    updateTotal();
-}
-
-function removeItem(item){
-    if(cart[item]>0){
-        cart[item]--;
-        document.getElementById(item).innerText=cart[item];
-        updateTotal();
-    }
-}
-
-function updateTotal(){
-    let total=0;
-    for(let i in cart){
-        total+=cart[i]*prices[i];
-    }
-    document.getElementById('totalBill').innerText='₹'+total;
-}
-
-function searchFood(){
-    let input = document.getElementById("searchBox").value.toLowerCase();
-    let items = document.getElementsByClassName("menu-item");
-    for(let i=0;i<items.length;i++){
-        let text = items[i].innerText.toLowerCase();
-        if(text.includes(input)){
-            items[i].style.display="flex";
-        } else {
-            items[i].style.display="none";
-        }
-    }
-}
-
-function sendOrder(){
-    let tableNo=document.getElementById('tableNo').value;
-    if(!tableNo){
-        alert("Please enter Table Number first!");
-        return;
-    }
-    let total=0;
-    let hasItems=false;
-    let msg='New Order%0ATable Number: '+tableNo+'%0A%0A';
-    
-    for(let i in cart){
-        if(cart[i]>0){
-            msg+=i+' x '+cart[i]+'%0A';
-            total+=cart[i]*prices[i];
-            hasItems=true;
-        }
-    }
-    
-    if(!hasItems){
-        alert("Please add at least one item to your cart!");
-        return;
-    }
-    
-    msg+='%0ATotal Bill: ₹'+total;
-    window.open('https://wa.me/919555484389?text='+msg,'_blank');
-}
-</script>
-</body>
-</html>
+                categoryHtml += `</div></div>`;
+                container.innerHTML += 
