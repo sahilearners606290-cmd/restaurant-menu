@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shyam Bog - Digital Menu</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans pb-36">
+
+    <header class="bg-orange-500 text-white p-5 sticky top-0 z-50 shadow-md text-center">
+        <h1 class="text-3xl font-extrabold tracking-wide">Shyam Bog</h1>
+        <p class="text-xs opacity-90 mt-1 font-medium">Shudh Evam Swadist Shakahari Bhojan</p>
+    </header>
+
+    <div class="max-w-md mx-auto px-4 mt-4">
+        
+        <div class="bg-white p-4 rounded-xl shadow-sm mb-4 space-y-3 border border-gray-100">
+            <div>
+                <label class="block text-xs font-bold uppercase text-gray-500 mb-1">Apna Table Number Darj Karein:</label>
+                <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                        <i class="fa-solid fa-chair"></i>
+                    </span>
+                    <input type="number" id="tableNumber" placeholder="Table No. (e.g. 5)" class="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 font-bold text-lg text-orange-600">
+                </div>
+            </div>
+            
+            <div class="relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input type="text" id="searchBar" oninput="searchFood()" placeholder="Pasandida bhojan khojein (Search)..." class="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
+            </div>
+        </div>
+
+        <div id="menuContainer" class="space-y-6"></div>
+    </div>
+
+    <div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white border-t border-gray-200 shadow-2xl p-4 z-50 rounded-t-2xl">
+        <div class="flex justify-between items-center mb-3 px-1">
+            <div>
+                <p class="text-xs text-gray-400 font-medium">Total Bill</p>
+                <p class="text-2xl font-black text-gray-800">₹<span id="totalBill">0</span></p>
+            </div>
+            <div class="text-right">
+                <p class="text-xs text-gray-400 font-medium">Chayanit Items</p>
+                <p class="text-sm font-bold text-orange-500"><span id="totalItems">0</span> Items Selected</p>
+            </div>
+        </div>
+        
+        <button onclick="sendWhatsAppOrder()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 text-lg transition duration-200">
+            <i class="fa-brands fa-whatsapp text-2xl"></i>
+            WhatsApp Par Order Bhejein
+        </button>
+    </div>
+
+    <script>
+        // Owner's WhatsApp number (Apna number yaha badlein)
+        const WHATSAPP_NUMBER = "919999999999"; 
+
+        // Full Database - Part A
+        const menuData = {
+            "Burger": [
+                { name: "Veg Burger", price: 55 },
+                { name: "Veg Cheese Burger", price: 80 },
+                { name: "Veg Paneer Burger", price: 70 },
+                { name: "Veg Tandoori Burger", price: 90 },
+                { name: "Tandoori Veg Paneer Burger", price: 110 },
+                { name: "Veg Club Burger Jumbo", price: 120 }
+            ],
+            "Pizza": [
+                { name: "Cheese Pizza", price: 210 },
+                { name: "Chili Garlic Pizza", price: 220 },
+                { name: "Tandoori Paneer Pizza", price: 230 },
+                { name: "Paneer Bites Pizza", price: 250 },
+                { name: "Veg Paneer Pizza", price: 260 },
+                { name: "Full Loaded Pizza", price: 399 },
+                { name: "Shyam Bog Spl. Pizza", price: 499 },
+                { name: "Pasta Pizza", price: 230 },
+                { name: "Sweet Corn Pizza", price: 250 },
+                { name: "Mushroom Pizza", price: 240 },
+                { name: "Onion Tomato Capsicum Pizza", price: 220 },
+                { name: "Kulhad Pizza", price: 140 },
+                { name: "Burmiza", price: 100 },
+                { name: "Veg Garlic Bread", price: 90 }
+            ],
+            "Special Amritsari Kulche": [
+                { name: "Plain Kulche Chhole", price: 120 },
+                { name: "Aloo Kulche Chhole", price: 150 },
+                { name: "Paneer Kulche", price: 200 },
+                { name: "Onion Kulche", price: 150 },
+                { name: "Mix Kulche", price: 180 }
+            ],
+            "South Indian": [
+                { name: "Paper Dosa", price: 70 },
+                { name: "Masala Dosa", price: 80 },
+                { name: "Paneer Masala Dosa", price: 110 },
+                { name: "Paneer Dosa", price: 120 },
+                { name: "Butter Masala Dosa", price: 100 },
+                { name: "Butter Paneer Dosa", price: 130 },
+                { name: "Veg Masala Dosa", price: 130 },
+                { name: "Shyam Bog Spl. Dosa", price: 150 },
+                { name: "Onion Uttapam", price: 80 },
+                { name: "Paneer Uttapam", price: 120 },
+                { name: "Mix Uttapam", price: 140 }
+            ],
+            "Kaju Special": [
+                { name: "Kaju Curry", price: 300 },
+                { name: "Kaju Korma", price: 360 },
+                { name: "Kaju Masala", price: 320 },
+                { name: "Kaju Paneer", price: 340 },
+                { name: "Kaju Khoya Masala", price: 360 }
+            ],
+            "Seasonal Veg": [
+                { name: "Aloo Jeera", price: 120 },
+                { name: "Aloo Matar Tomato", price: 150 },
+                { name: "Aloo Gobhi (Dry)", price: 150 },
+                { name: "Aloo Parwal (Dry)", price: 150 },
+                { name: "Gobhi Butter Masala", price: 180 },
+                { name: "Mix Veg", price: 180 },
+                { name: "Gobhi Matar", price: 160 },
+                { name: "Chana Masala", price: 200 },
+                { name: "Bhindi Masala", price: 160 },
+                { name: "Bhindi Kurkure", price: 180 },
+                { name: "Aloo Dum Banarasi", price: 160 },
+                { name: "Aloo Dum Kashmiri", price: 280 }
+            ],
+            "Main Course Paneer wa Mushroom": [
+                { name: "Matar Paneer Full", price: 240 },
+                { name: "Matar Paneer Half", price: 160 },
+                { name: "Paneer Butter Masala", price: 280 },
+                { name: "Shahi Paneer", price: 280 },
+                { name: "Paneer Masala", price: 280 },
+                { name: "Kadhai Paneer", price: 280 },
+                { name: "Paneer Handi", price: 270 },
+                { name: "Paneer Do Pyaza", price: 280 },
+                { name: "Paneer Lababdar", price: 290 },
+                { name: "Paneer Punjabi", price: 300 },
+                { name: "Paneer Korma", price: 300 },
+                { name: "Paneer Kolhapuri", price: 190 },
+                { name: "Palak Paneer", price: 300 },
+                { name: "Paneer Hungama", price: 320 },
+                { name: "Paneer Angara", price: 320 },
+                { name: "Paneer Pasanda", price: 320 },
+                { name: "Paneer Maharaja", price: 280 },
+                { name: "Khoya Paneer", price: 280 },
+                { name: "Navratan Korma", price: 320 },
+                { name: "Paneer Begam Bahar", price: 400 },
+                { name: "Shyam Bog Spl. Paneer Pakeezah", price: 300 },
+                { name: "Paneer Tikka Masala", price: 240 },
+                { name: "Mushroom Curry", price: 260 },
+                { name: "Mushroom Masala", price: 290 },
+                { name: "Mushroom Butter Masala", price: 300 },
+                { name: "Mushroom Do Pyaza", price: 300 }
+            ],
+            "Indian Starter": [
+                { name: "Veg Cutlet", price: 80 },
+                { name: "Paneer Cutlet", price: 120 },
+                { name: "Paneer Pakoda", price: 130 },
+                { name: "Mix Pakoda", price: 110 },
+                { name: "Pyaz Pakoda", price: 80 },
+                { name: "French Fries", price: 100 },
+                { name: "Masala Papad", price: 50 },
+                { name: "Fry Papad", price: 30 },
+                { name: "Dry Papad", price: 20 }
+            ],
+            "Chinese Starter": [
+                { name: "Veg Fried Rice", price: 130 },
+                { name: "Veg Paneer Fried Rice", price: 150 },
+                { name: "Veg Manchurian Fried Rice", price: 160 },
+                { name: "Veg Schezwan Fried Rice", price: 140 },
+                { name: "Paneer Chili (Dry)", price: 200 },
+                { name: "Paneer Chili (Gravy)", price: 210 },
+                { name: "Mushroom Chili (Dry)", price: 210 },
+                { name: "Baby Corn Crispy", price: 200 },
+                { name: "Paneer Manchurian (Dry)", price: 190 },
+                { name: "Paneer Manchurian (Gravy)", price: 200 },
+                { name: "Veg Manchurian (Dry)", price: 150 },
+                { name: "Veg Manchurian (Gravy)", price: 160 },
+                { name: "Paneer 65", price: 210 },
+                { name: "Veg Lollipop", price: 200 },
+                { name: "Paneer Lollipop", price: 260 }
+            ],
+            "Tandoori Roti wa Naan": [
+                { name: "Plain Roti", price: 12 },
+                { name: "Butter Roti", price: 15 },
+                { name: "Makka Roti", price: 30 },
+                { name: "Missi Roti", price: 50 },
+                { name: "Stuff Missi", price: 70 },
+                { name: "Lachha Paratha", price: 50 },
+                { name: "Plain Naan", price: 40 },
+                { name: "Butter Naan", price: 50 },
+                { name: "Garlic Naan", price: 80 },
+                { name: "Stuff Naan", price: 100 },
+                { name: "Keezar Naan", price: 80 },
+                { name: "Paneer Naan", price: 120 },
+                { name: "Chur Chur Naan", price: 130 },
+                { name: "Shahi Naan", price: 170 }
+            ],
+            "Raita wa Salad": [
+                { name: "Boondi Raita", price: 100 },
+                { name: "Veg Raita", price: 110 },
+                { name: "Fruit Raita", price: 140 },
+                { name: "Onion Salad", price: 40 },
+                { name: "Green Salad", price: 60 },
+                { name: "Tomato Salad", price: 40 }
+            ],
+            "Ice Cream": [
+                { name: "Vanilla Ice Cream", price: 60 },
+                { name: "Strawberry Ice Cream", price: 60 },
+                { name: "Butter Scotch Ice Cream", price: 70 },
+                { name: "Chocolate Ice Cream", price: 90 }
+            ],
+            "Veg Thali": [
+                { name: "Veg Thali (Normal)", price: 150 },
+                { name: "Veg Thali (Butter Roti)", price: 200 },
+                { name: "Special Veg Thali (Naan)", price: 260 }
+            ],
+            "Kofta, Dal wa Rice": [
+                { name: "Veg Kofta", price: 200 },
+                { name: "Anguri Kofta", price: 280 },
+                { name: "Malai Kofta", price: 260 },
+                { name: "Nargisi Kofta", price: 350 },
+                { name: "Dal Fried", price: 120 },
+                { name: "Dal Jeera", price: 100 },
+                { name: "Dal Tadka", price: 140 },
+                { name: "Butter Dal Fried", price: 130 },
+                { name: "Dal Mughlai", price: 180 },
+                { name: "Dal Makhani", price: 240 },
+                { name: "Plain Rice", price: 90 },
+                { name: "Jeera Rice", price: 120 },
+                { name: "Masala Rice", price: 150 },
+                { name: "Veg Pulao", price: 180 },
+                { name: "Matar Pulao", price: 170 },
+                { name: "Paneer Pulao", price: 220 },
+                { name: "Kashmiri Pulao", price: 260 },
+                { name: "Veg Biryani", price: 180 },
+                { name: "Paneer Biryani", price: 200 },
+                { name: "Paneer Dum Biryani", price: 260 }
+            ],
+            "Soup Beverages wa Shake": [
+                { name: "Veg Hot & Sour Soup", price: 99 },
+                { name: "Veg Manchow Soup", price: 99 },
+                { name: "Sweet Corn Soup", price: 100 },
+                { name: "Tomato Soup", price: 80 },
+                { name: "Mushroom Soup", price: 100 },
+                { name: "Mineral Water", price: 20 },
+                { name: "Chai", price: 25 },
+                { name: "Hot Coffee", price: 35 },
+                { name: "Chocolate Coffee", price: 50 },
+                { name: "Lassi", price: 50 },
+                { name: "Cold Coffee", price: 90 },
+                { name: "Strawberry Shake", price: 90 },
+                { name: "Vanilla Shake", price: 90 },
+                { name: "Chocolate Shake", price: 110 },
+                { name: "Mango Shake", price: 110 }
+            ],
+            "Roll, Noodles wa Tandoori Starter": [
+                { name: "Veg Kathi Roll", price: 80 },
+                { name: "Veg Paneer Kathi Roll", price: 120 },
+                { name: "Veg Mushroom Kathi Roll", price: 130 },
+                { name: "Veg Schezwan Kathi Roll", price: 110 },
+                { name: "Veg Chowmein", price: 100 },
+                { name: "Veg Paneer Chowmein", price: 130 },
+                { name: "Veg Schezwan Noodles", price: 110 },
+                { name: "Veg Hakka Noodles", price: 120 },
+                { name: "Chili Garlic Noodles", price: 140 },
+                { name: "Manchurian Noodles", price: 120 },
+                { name: "Veg American Chopsuey", price: 160 },
+                { name: "Mix American Chopsuey", price: 200 },
+                { name: "Paneer Tikka Dry", price: 280 },
+                { name: "Paneer Malai Tikka", price: 300 },
+                { name: "Paneer Achari Tikka", price: 280 },
+                { name: "Mushroom Tikka", price: 270 },
+                { name: "Malai Chaap", price: 170 },
+                { name: "Tandoori Chaap", price: 160 }
+            ],
+            "Sweet Breakfast wa Sandwich": [
+                { name: "Rasmalai", price: 40 },
+                { name: "Rabdi", price: 50 },
+                { name: "Shyam Bog Spl. Sweet", price: 60 },
+                { name: "Raj Bhog", price: 30 },
+                { name: "Gajar Halwa (100g)", price: 50 },
+                { name: "Sponge Rasgulla", price: 20 },
+                { name: "Lal Mohan", price: 20 },
+                { name: "Aloo Paratha with Dahi", price: 70 },
+                { name: "Gobhi Paratha with Dahi", price: 80 },
+                { name: "Mix Paratha with Dahi", price: 90 },
+                { name: "Paneer Paratha with Dahi", price: 100 },
+                { name: "Pyaz Onion Paratha with Dahi", price: 70 },
+                { name: "Chhola Puri", price: 70 },
+                { name: "Chhola Bhatura", price: 90 },
+                { name: "Pav Bhaji", price: 80 },
+                { name: "Spl. Pav Bhaji", price: 120 },
+                { name: "Normal Sandwich", price: 50 },
+                { name: "Veg Sandwich", price: 70 },
+                { name: "Veg Cheese Sandwich", price: 90 },
+                { name: "Veg Paneer Sandwich", price: 80 },
+                { name: "Veg Club Sandwich", price: 110 },
+                { name: "Tandoori Sandwich", price: 100 }
+            ]
+        };
+
+        let cart = {};
+
+        // Render Application View
+        function renderMenu() {
+            const container = document.getElementById("menuContainer");
+            container.innerHTML = "";
+
+            for (let category in menuData) {
+                let categoryHtml = `
+                    <div class="category-section bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100 block">
+                        <div class="bg-orange-50 px-4 py-3 border-b border-orange-100">
+                            <h2 class="text-lg font-bold text-orange-700">${category}</h2>
+                        </div>
+                        <div class="divide-y divide-gray-100">
+                `;
+
+                menuData[category].forEach(item => {
+                    const itemId = item.name.replace(/\s+/g, '-');
+                    const qty = cart[item.name] ? cart[item.name].qty : 0;
+
+                    categoryHtml += `
+                        <div class="food-item flex justify-between items-center p-4 hover:bg-gray-50/50" data-name="${item.name.toLowerCase()}">
+                            <div>
+                                <h3 class="font-semibold text-gray-900">${item.name}</h3>
+                                <p class="text-orange-600 font-bold mt-0.5">₹${item.price}</p>
+                            </div>
+                            
+                            <div class="flex items-center bg-orange-50 border border-orange-200 rounded-xl p-1 shadow-sm">
+                                <button onclick="updateQty('${item.name}', ${item.price}, -1)" class="w-8 h-8 rounded-lg bg-white text-orange-600 font-extrabold flex items-center justify-center hover:bg-orange-100 active:scale-95 transition">
+                                    <i class="fa-solid fa-minus text-xs"></i>
+                                </button>
+                                <span id="qty-${itemId}" class="w-9 text-center font-black text-gray-800 text-base">${qty}</span>
+                                <button onclick="updateQty('${item.name}', ${item.price}, 1)" class="w-8 h-8 rounded-lg bg-white text-orange-600 font-extrabold flex items-center justify-center hover:bg-orange-100 active:scale-95 transition">
+                                    <i class="fa-solid fa-plus text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                categoryHtml += `</div></div>`;
+                container.innerHTML += categoryHtml;
+            }
+        }
+
+        // Qty Toggler
+        function updateQty(name, price, change) {
+            const itemId = name.replace(/\s+/g, '-');
+            if (!cart[name]) cart[name] = { price: price, qty: 0 };
+            cart[name].qty += change;
+
+            if (cart[name].qty <= 0) {
+                delete cart[name];
+                document.getElementById(`qty-${itemId}`).innerText = 0;
+            } else {
+                document.getElementById(`qty-${itemId}`).innerText = cart[name].qty;
+            }
+            calculateTotal();
+        }
+
+        // Realtime Calculator
+        function calculateTotal() {
+            let totalBill = 0, totalItems = 0;
+            for (let key in cart) {
+                totalBill += cart[key].price * cart[key].qty;
+                totalItems += cart[key].qty;
+            }
+            document.getElementById("totalBill").innerText = totalBill;
+            document.getElementById("totalItems").innerText = totalItems;
+        }
+
+        // Search Filter Engine
+        function searchFood() {
+            let input = document.getElementById('searchBar').value.toLowerCase().trim();
+            let foodItems = document.getElementsByClassName('food-item');
+            let sections = document.getElementsByClassName('category-section');
+
+            for (let i = 0; i < foodItems.length; i++) {
+                let name = foodItems[i].getAttribute('data-name');
+                if (input === "" || name.includes(input)) {
+                    foodItems[i].style.setProperty('display', 'flex', 'important');
+                } else {
+                    foodItems[i].style.setProperty('display', 'none', 'important');
+                }
+            }
+
+            for (let j = 0; j < sections.length; j++) {
+                let itemsInside = sections[j].getElementsByClassName('food-item');
+                let hasVisibleItem = false;
+                for (let k = 0; k < itemsInside.length; k++) {
+                    if (itemsInside[k].style.display !== "none") {
+                        hasVisibleItem = true;
+                        break;
+                    }
+                }
+                sections[j].style.setProperty('display', hasVisibleItem ? 'block' : 'none', 'important');
+            }
+        }
+
+        // Checkout Manager
+        function sendWhatsAppOrder() {
+            const tableNum = document.getElementById("tableNumber").value.trim();
+            if (!tableNum) { alert("Kripya pehle apna table number darj karein! 🪑"); return; }
+            if (Object.keys(cart).length === 0) { alert("Kripya order karne ke liye kam se kam ek item chunein! 🛒"); return; }
+
+            let message = `*--- 🍽️ New Order (SHYAM BOG) ---*\n\n*🪑 Table Number:* ${tableNum}\n-----------------------------\n`;
+            let grandTotal = 0;
+            for (let key in cart) {
+                let itemTotal = cart[key].price * cart[key].qty;
+                grandTotal += itemTotal;
+                message += `▪️ ${key} x ${cart[key].qty} = *₹${itemTotal}*\n`;
+            }
+            message += `-----------------------------\n*💰 Grand Total:* ₹${grandTotal}\n\nKripya hamara order jaldi taiyar karein. Dhanyawad! 🙏`;
+            window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        window.onload = function() { renderMenu(); };
+    </script>
+</body>
+</html>
