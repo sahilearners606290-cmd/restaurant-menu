@@ -58,15 +58,15 @@
 
     <script>
         // Owner's WhatsApp number (Apna number yaha badlein)
-        const WHATSAPP_NUMBER = "919555484389"; 
-
-               // 🟢 Google Sheet CSV Link (Live Connection)
+                 // 🟢 Google Sheet CSV Link (Live Connection)
         const GOOGLE_SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSHyTwOpmmpDJuunmOMAtaKBQ-hMEdMCs3t0EpMAPA_cfHaJfbLvFbZn26M13l9uy2L3IDmPErpSOFF/pub?output=csv";
 
+        // Shuruat me ek default number rakh rahe hain (agar sheet se load na ho paye)
+        let WHATSAPP_NUMBER = "919555484389"; 
         let menuData = {};
         let cart = {};
 
-        // Google Sheet se data load karne ka automatic function
+        // Google Sheet se data aur WhatsApp number load karne ka automatic function
         async function fetchMenuFromSheet() {
             try {
                 const response = await fetch(GOOGLE_SHEET_CSV_URL);
@@ -75,7 +75,16 @@
                 const rows = csvText.split("\n");
                 const freshMenuData = {};
 
-                // Pehli line header hai, isliye i = 1 se shuru karenge
+                // 📞 Pehli line (Row 1) se WhatsApp number nikalna
+                if (rows.length > 0) {
+                    const firstRowColumns = rows[0].split(",");
+                    if (firstRowColumns.length >= 5 && firstRowColumns[4].trim()) {
+                        // Agar Column E me koi number likha hai toh use set karein
+                        WHATSAPP_NUMBER = firstRowColumns[4].trim().replace(/[^0-9]/g, '');
+                    }
+                }
+
+                // Pehli line heading hai, isliye i = 1 se items shuru karenge
                 for (let i = 1; i < rows.length; i++) {
                     const currentRow = rows[i].trim();
                     if (!currentRow) continue;
@@ -96,7 +105,7 @@
                     }
                 }
 
-                // Global menuData me fresh live data set karna
+                // Global variables me fresh data set karna
                 menuData = freshMenuData;
                 
                 // Live data ke sath menu ko screen par dikhana
